@@ -1,6 +1,14 @@
 {
+    "include": ["src/**/*", "src/global.d.ts"],
     "compilerOptions": {
-        "jsx": "react"
-    },
-    "include": ["src/**/*", "src/global.d.ts"]
+        "jsx": "react",
+        "sourceMap": true,
+        "outDir": "dist",
+        "target": "ESNext",
+        "module": "CommonJS",
+        "strict": true,
+        "lib": ["esnext"],
+        "esModuleInterop": true,
+    "declaration": true,
+  }
 }

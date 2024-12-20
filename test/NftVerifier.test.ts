@@ -1,22 +1,24 @@
 import { NftVerifier } from '../src/sdk/NftVerifier';
-import axios from 'axios';
-import MockAdapter from 'axios-mock-adapter';
 
 describe('NftVerifier', () => {
-  let mock: InstanceType<typeof MockAdapter>;;
   let nftVerifier: NftVerifier;
 
   beforeEach(() => {
-    mock = new MockAdapter(axios);
     nftVerifier = new NftVerifier('https://api.example.com');
+    // Mock the global fetch function
+    global.fetch = jest.fn();
   });
 
   afterEach(() => {
-    mock.restore();
+    jest.restoreAllMocks();
   });
 
   it('should verify ownership successfully', async () => {
-    mock.onPost('/owner').reply(200, { owned: true });
+    // Mock a successful response
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: true,
+      json: async () => ({ owned: true }),
+    });
 
     const result = await nftVerifier.verifyOwnership({
       accountAddress: '0x1234567890abcdef',
@@ -24,10 +26,25 @@ describe('NftVerifier', () => {
     });
 
     expect(result).toBe(true);
+    expect(fetch).toHaveBeenCalledWith('https://api.example.com/owner', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accountAddress: '0x1234567890abcdef',
+        contractAddress: '0xabcdefabcdefabcdef',
+      }),
+    });
   });
 
   it('should handle API errors gracefully', async () => {
-    mock.onPost('/owner').reply(500);
+    // Mock a failed response
+    (fetch as jest.Mock).mockResolvedValue({
+      ok: false,
+      status: 500,
+      json: async () => ({ error: 'Internal Server Error' }),
+    });
 
     const result = await nftVerifier.verifyOwnership({
       accountAddress: '0x1234567890abcdef',
@@ -35,5 +52,15 @@ describe('NftVerifier', () => {
     });
 
     expect(result).toBe(false);
+    expect(fetch).toHaveBeenCalledWith('https://api.example.com/owner', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        accountAddress: '0x1234567890abcdef',
+        contractAddress: '0xabcdefabcdefabcdef',
+      }),
+    });
   });
 });
