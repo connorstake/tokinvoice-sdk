@@ -2,7 +2,9 @@
   "name": "tokinvoice-sdk",
   "version": "1.0.0",
   "description": "Tokinvoice NFT Verification SDK",
-  "main": "index.js",
+  "main": "dist/index.js",   
+  "types": "dist/index.d.ts", 
+  "files": ["dist"],          
   "scripts": {
     "build": "tsc",
     "example": "ts-node examples/exampleUsage.ts",
@@ -21,6 +23,7 @@
     "axios-mock-adapter": "^2.1.0",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "local-package-publisher": "^1.0.5",
     "ts-jest": "^29.2.5",
     "typescript": "^5.7.2"
   }
