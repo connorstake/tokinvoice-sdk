@@ -1,0 +1,19 @@
+{
+  "name": "tokinvoice-sdk",
+  "version": "1.0.0",
+  "description": "Tokinvoice NFT Verification SDK",
+  "main": "index.js",
+  "scripts": {
+    "build": "tsc",
+    "example": "ts-node examples/exampleUsage.ts"
+  },
+  "author": "Connor Payne",
+  "license": "ISC",
+  "dependencies": {
+    "axios": "^1.7.9",
+    "ethers": "^6.13.4"
+  },
+  "devDependencies": {
+    "@types/ethereum-protocol": "^1.0.5"
+  }
+}
